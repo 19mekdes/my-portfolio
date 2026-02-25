@@ -49,7 +49,7 @@ const Footer = () => {
           >
             <h3 className="footer-heading">About Me</h3>
             <p className="footer-about">
-              I'm a passionate frontend developer and UI/UX designer creating modern,
+              I'm a passionate full stack developer and AI developer creating modern,
               responsive web applications with React and cutting-edge technologies.
             </p>
             <div className="footer-social">

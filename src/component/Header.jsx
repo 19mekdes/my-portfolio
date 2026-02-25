@@ -1,75 +1,96 @@
 import { useState } from "react";
 import { Link } from "react-scroll";
-import { FaBars, FaTimes } from "react-icons/fa";
-import "./Header.css"; 
-import logo from "../assets/logo.png"; 
+import { motion } from "framer-motion";
+import { FaCode, FaGithub, FaLinkedin, FaFileDownload } from "react-icons/fa";
+import "./Header.css";
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [hovered, setHovered] = useState(null);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  const navLinks = [
-    { id: "home", name: "Home" },
-    { id: "about", name: "About" },
-    { id: "skills", name: "Skills" },
-    { id: "projects", name: "Projects" },
-    { id: "contact", name: "Contact" }
+  const navItems = [
+    { id: "home", label: "home()", icon: "{}" },
+    { id: "about", label: "about()", icon: "</>" },
+    { id: "skills", label: "skills()", icon: "[]" },
+    { id: "projects", label: "projects()", icon: "<>" },
+    { id: "contact", label: "contact()", icon: "()" }
   ];
 
   return (
-    <header className="header">
-      <div className="header-container">
-        {}
-        <Link to="home" smooth={true} duration={500} className="logo-link">
-          <img src={logo} alt="Mekdes" className="logo" />
-        </Link>
-
-        {}
-        <nav className="desktop-nav">
-          {navLinks.map((link) => (
-            <Link
-              key={link.id}
-              to={link.id}
-              smooth={true}
-              duration={500}
-              offset={-80}
-              className="nav-link"
-              activeClass="active-link"
+    <motion.header 
+      className="header-creative"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 100 }}
+    >
+      <div className="container">
+        {/* Animated Code Background */}
+        <div className="code-background">
+          {[...Array(5)].map((_, i) => (
+            <motion.div 
+              key={i}
+              className="code-line"
+              initial={{ x: -100 }}
+              animate={{ x: "100vw" }}
+              transition={{ 
+                duration: 10 + i * 2,
+                repeat: Infinity,
+                delay: i * 0.5 
+              }}
             >
-              {link.name}
-            </Link>
+              <span>const portfolio = new Portfolio();</span>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Logo with Code Style */}
+        <motion.div 
+          className="logo-creative"
+          whileHover={{ rotate: 5 }}
+        >
+          <Link to="home" smooth={true} duration={500}>
+            <FaCode className="code-icon" />
+            <span className="logo-code">
+              {"<"}
+              <span className="logo-name">Mekdes</span>
+              {"/>"}
+            </span>
+          </Link>
+        </motion.div>
+
+        {/* Navigation */}
+        <nav className="nav-creative">
+          {navItems.map((item) => (
+            <motion.div
+              key={item.id}
+              className="nav-item-creative"
+              onHoverStart={() => setHovered(item.id)}
+              onHoverEnd={() => setHovered(null)}
+              whileHover={{ y: -3 }}
+            >
+              <Link
+                to={item.id}
+                smooth={true}
+                duration={500}
+                offset={-80}
+                className="nav-link-creative"
+                activeClass="active-creative"
+              >
+                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-label">{item.label}</span>
+                {hovered === item.id && (
+                  <motion.span 
+                    className="hover-line"
+                    layoutId="hover-line"
+                  />
+                )}
+              </Link>
+            </motion.div>
           ))}
         </nav>
 
-        {}
-        <button className="mobile-menu-btn" onClick={toggleMenu}>
-          {isOpen ? <FaTimes /> : <FaBars />}
-        </button>
-
-        {}
-        {isOpen && (
-          <div className="mobile-nav">
-            <nav className="mobile-nav-links">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.id}
-                  to={link.id}
-                  smooth={true}
-                  duration={500}
-                  offset={-80}
-                  className="mobile-nav-link"
-                  activeClass="active-link"
-                  onClick={toggleMenu}
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        )}
+        
       </div>
-    </header>
+    </motion.header>
   );
 };
 
